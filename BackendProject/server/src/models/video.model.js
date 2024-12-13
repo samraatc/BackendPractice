@@ -1,52 +1,49 @@
 import mongoose, {Schema} from "mongoose";
+import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 
-const userSchma = new Schema(
+
+const videoSchma = new Schema(
     {
-        username:{
-            type:String,
-            required:true,
-            unique:true,
-            lowercase:true,
-            trim:true,
-            index: true,
-        },
-        email:{
-            type:String,
-            required:true,
-            unique:true,
-            lowercase:true,
-            trim:true,
-        },
-        fulname:{
-            type:String,
-            required:true,
-            lowercase:true,
-            trim:true,
-            index: true,
-        },
-        avtar:{
-            type:String,   // cloudnary url
-            required:true,
-        },
-        email:{
-            type:String,
-        },
-        watchHistory:[
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'video',
-            }
-        ],
-        pasword: {
-            type: String,
-            required: [true, 'Password is requiered'],
-            minlength: 8,
-        },
-        refreshToken: {
-            type: String,
-        }
+       videoFile: {
+        type: String,
+        required: true,
+
+       },
+       thumbnail: {
+        type: String,
+        required: true,
+       },
+       title: {
+        type: String,
+        required: true,
+       },
+       description: {
+        type: String,
+        required: true,
+       },
+       duration: {
+        type: String,
+        required: true,
+       },
+       views:{
+        type: Number,
+        default: 0,
+       },
+       isPublished: {
+        type: Boolean,
+        default: true,
+
+       },
+       owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+       }
     },
     {
         timestamps: true
     }
 )
+
+videoSchma.plugin(mongooseAggregatePaginate)
+export const Video = mongoose.model("Video", videoSchma);
