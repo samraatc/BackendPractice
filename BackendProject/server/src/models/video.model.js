@@ -1,3 +1,4 @@
+import { v2 as cloudinary } from "cloudinary";
 import mongoose, {Schema} from "mongoose";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 
