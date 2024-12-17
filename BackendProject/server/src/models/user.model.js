@@ -30,9 +30,6 @@ const userSchma = new Schema(
       type: String, // cloudnary url
       required: true,
     },
-    email: {
-      type: String,
-    },
     watchHistory: [
       {
         type: Schema.Types.ObjectId,
@@ -61,7 +58,7 @@ userSchma.pre("save", async function (next) {
   // }
 
   if (!this.isMounted("password")) return next();
-  this.password = bcrypt.hash(this.password, 10);
+  this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
