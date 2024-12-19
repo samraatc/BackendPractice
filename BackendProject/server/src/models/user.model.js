@@ -26,9 +26,12 @@ const userSchma = new Schema(
       trim: true,
       index: true,
     },
-    avtar: {
+    avatar: {
       type: String, // cloudnary url
       required: true,
+    },
+    coverImage: {
+      type: String, // cloudnary url
     },
     watchHistory: [
       {
@@ -36,7 +39,7 @@ const userSchma = new Schema(
         ref: "Video",
       },
     ],
-    pasword: {
+    password: {
       type: String,
       required: [true, "Password is requiered"],
       minlength: 8,
@@ -44,6 +47,9 @@ const userSchma = new Schema(
     refreshToken: {
       type: String,
     },
+    // accessToken:{
+    //   type:String
+    // }
   },
   {
     timestamps: true,
@@ -52,12 +58,12 @@ const userSchma = new Schema(
 
 // encryption and compare of the password for authentication and security purposes
 userSchma.pre("save", async function (next) {
-  // if (this.isMounted("pasword")) {
+  // if (this.isModified("password")) {
   //     this.pasword = bcrypt.hash(this.pasword, 8)
   //     next();
   // }
 
-  if (!this.isMounted("password")) return next();
+  if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 10);
   next();
 });
@@ -69,7 +75,7 @@ userSchma.methods.isPasswordCorrect = async function (password) {
 userSchma.methods.generateAccessToken = function () {
   return jwt.sign(
     {
-      id: this._id,
+      _id: this._id,
       email: this.email,
       username: this.username,
       fullname: this.fullname,

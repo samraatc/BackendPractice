@@ -11,23 +11,26 @@ cloudinary.config({
 // Upload an image
 
 const upLoadCloudinary = async (localFilePath) => {
-    try {
-        if (!localFilePath) return null;
-        // upload the cloudinary image
-        const response = await cloudinary.uploader.upload(localFilePath, {
-            resource_type: "auto",
-            // eager: [{ width: 500, height: 500, crop: "fill" }],
-        })
+  try {
+    if (!localFilePath) return null;
+    // upload the cloudinary image
+    const response = await cloudinary.uploader.upload(localFilePath, {
+      resource_type: "auto",
+      // eager: [{ width: 500, height: 500, crop: "fill" }],
+    });
 
-        console.log("File has been Uploaded cloudinary", response.url);
-        return response;
+    // file has been uploaded successfully
+    // console.log("File has been Uploaded cloudinary", response.url);
+    // remove or unlink the avatar image from server after the image is successfully uploaded
+    fs.unlinkSync(localFilePath);
+    return response;
 
-    } catch (error) {
-        fs.unlinkSync(localFilePath); // remove temporary file from the server when upload complete or fail
-        return null;
-    }
+  } catch (error) {
+    // remove temporary file from the server when upload complete or fail
+    fs.unlinkSync(localFilePath); 
+    return null;
+  }
 };
-
 
 // const uploadResult = await cloudinary.uploader
 //   .upload(
@@ -42,6 +45,4 @@ const upLoadCloudinary = async (localFilePath) => {
 
 // console.log(uploadResult);
 
-
-
-export { upLoadCloudinary }
+export { upLoadCloudinary };
